@@ -102,6 +102,9 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.5.14
         version: 0.5.14(prettier@2.8.8)
+      react-native-dotenv:
+        specifier: ^3.4.11
+        version: 3.4.11(@babel/runtime@7.28.4)
       react-test-renderer:
         specifier: 19.1.1
         version: 19.1.1(react@19.1.1)
@@ -1790,6 +1793,10 @@ packages:
     resolution: {integrity: sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w==}
     engines: {node: '>=6.0.0'}
 
+  dotenv@16.6.1:
+    resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
+    engines: {node: '>=12'}
+
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
     engines: {node: '>= 0.4'}
@@ -3361,6 +3368,11 @@ packages:
         optional: true
       react-native-svg:
         optional: true
+
+  react-native-dotenv@3.4.11:
+    resolution: {integrity: sha512-6vnIE+WHABSeHCaYP6l3O1BOEhWxKH6nHAdV7n/wKn/sciZ64zPPp2NUdEUf1m7g4uuzlLbjgr+6uDt89q2DOg==}
+    peerDependencies:
+      '@babel/runtime': ^7.20.6
 
   react-native-is-edge-to-edge@1.2.1:
     resolution: {integrity: sha512-FLbPWl/MyYQWz+KwqOZsSyj2JmLKglHatd3xLZWskXOpRaio4LfEDEz8E/A6uD8QoTHW6Aobw1jbEwK7KMgR7Q==}
@@ -6300,6 +6312,8 @@ snapshots:
     dependencies:
       esutils: 2.0.3
 
+  dotenv@16.6.1: {}
+
   dunder-proto@1.0.1:
     dependencies:
       call-bind-apply-helpers: 1.0.2
@@ -8178,6 +8192,11 @@ snapshots:
       react-native-safe-area-context: 5.4.0(react-native@0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1))(react@19.1.1)
     transitivePeerDependencies:
       - supports-color
+
+  react-native-dotenv@3.4.11(@babel/runtime@7.28.4):
+    dependencies:
+      '@babel/runtime': 7.28.4
+      dotenv: 16.6.1
 
   react-native-is-edge-to-edge@1.2.1(react-native@0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1))(react@19.1.1):
     dependencies:
