@@ -24,8 +24,8 @@
       "@hooks/*": [
         "src/hooks/*"
       ],
-      "@utils/*": [
-        "src/utils/*"
+      "@stacks/*": [
+        "src/stacks/*"
       ]
     }
   }
