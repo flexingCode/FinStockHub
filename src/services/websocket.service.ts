@@ -43,19 +43,6 @@ class WebSocketService {
           resolve();
         };
 
-        this.ws.onmessage = (event) => {
-          try {
-            const message = JSON.parse(event.data);
-            if (message.type === 'trade') {
-              this.emit('trade', message.data);
-            } else if (message.type === 'ping') {
-              this.emit('ping', message.data);
-            }
-          } catch (error) {
-            console.error('WebSocket: Error parsing message:', error);
-          }
-        };
-
         this.ws.onclose = () => {
           clearTimeout(timeoutId);
           this.handleReconnection();
@@ -87,7 +74,11 @@ class WebSocketService {
     this.subscribedSymbols.add(symbol);
     
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      this.ws.send(JSON.stringify({ type: 'subscribe', symbol }));
+      const message = JSON.stringify({ type: 'subscribe', symbol });
+      console.log('Sending subscription:', message);
+      this.ws.send(message);
+    } else {
+      console.log('WebSocket not ready, subscription queued for:', symbol);
     }
   }
 

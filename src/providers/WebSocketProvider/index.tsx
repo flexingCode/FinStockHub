@@ -18,6 +18,7 @@ const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
     setError,
     addSubscribedSymbol,
     removeSubscribedSymbol,
+    updateStockPrice,
   } = useWebSocketStore();
 
   useEffect(() => {
@@ -33,6 +34,19 @@ const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
 
         console.log('WebSocketProvider: Creating service...');
         wsServiceRef.current = new WebSocketService(config);
+
+        wsServiceRef.current.on('message', (message: any) => {          
+          if (message.type === 'trade' && message.data && Array.isArray(message.data)) {
+            console.log('Trade data received:', message.data);
+            
+            message.data.forEach((trade: any) => {
+              if (trade.s && trade.p) {
+                console.log(`Price update: ${trade.s} = $${trade.p}`);
+                updateStockPrice(trade.s, trade.p, trade.t || Date.now());
+              }
+            });
+          }
+        });
 
         console.log('WebSocketProvider: Connecting...');
         await wsServiceRef.current.connect();
