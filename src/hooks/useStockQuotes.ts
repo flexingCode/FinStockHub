@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import http from '@/http';
 import { GetStockQuoteResponse, StockCurrentPriceResponse } from '@/types/http/res/stock.response';
 import stockServices from '@/services/stock.services';
@@ -29,10 +29,45 @@ export const useStockQuotes = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  const { subscribe } = useWebSocket();
+  const { subscribe, unsubscribe } = useWebSocket();
   const { stockPrices } = useWebSocketStore();
   const hasMore = currentIndex < symbols.length;
+
+  const subscribedSymbolsRef = useRef<string[]>([]);
+  const MAX_SUBSCRIPTIONS = 30;
+  const UNSUBSCRIBE_BATCH = 10;
+
+  const manageSubscriptions = useCallback((newSymbols: string[]) => {
+    const currentSubscriptions = [...subscribedSymbolsRef.current];
+    
+    newSymbols.forEach(symbol => {
+      if (!currentSubscriptions.includes(symbol)) {
+        currentSubscriptions.push(symbol);
+        subscribe(symbol);
+      }
+    });
+
+    if (currentSubscriptions.length > MAX_SUBSCRIPTIONS) {
+      const symbolsToUnsubscribe = currentSubscriptions.slice(0, UNSUBSCRIBE_BATCH);
+      
+      symbolsToUnsubscribe.forEach(symbol => {
+        unsubscribe(symbol);
+      });
+
+      const updatedSubscriptions = currentSubscriptions.slice(UNSUBSCRIBE_BATCH);
+      symbolsToUnsubscribe.forEach(symbol => {
+        setQuotes(prev => {
+          const newQuotes = { ...prev };
+          delete newQuotes[symbol];
+          return newQuotes;
+        });
+      });
+
+      subscribedSymbolsRef.current = updatedSubscriptions;
+    } else {
+      subscribedSymbolsRef.current = currentSubscriptions;
+    }
+  }, [subscribe, unsubscribe]);
 
   
   useEffect(() => {
@@ -88,11 +123,10 @@ export const useStockQuotes = ({
 
       setQuotes(prev => ({ ...prev, ...newQuotes }));
       
-      batch.forEach(symbol => {
-        subscribe(symbol);
-      });
+      // Usar la función de manageSubscriptions que no causa re-renders
+      manageSubscriptions(batch);
 
-      setCurrentIndex(prev => prev + batchSize);
+      setCurrentIndex(prev => prev + batchSize);      
       
       onBatchLoaded?.(validQuotes);
     } catch (err) {
@@ -100,7 +134,7 @@ export const useStockQuotes = ({
     } finally {
       setLoading(false);
     }
-  }, [symbols, batchSize, currentIndex, loading, hasMore, onBatchLoaded]);
+  }, [symbols, batchSize, currentIndex, loading, hasMore, onBatchLoaded, manageSubscriptions]);
 
   useEffect(() => {
     if (symbols.length > 0 && currentIndex === 0) {

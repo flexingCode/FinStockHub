@@ -35,7 +35,9 @@ const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
         console.log('WebSocketProvider: Creating service...');
         wsServiceRef.current = new WebSocketService(config);
 
-        wsServiceRef.current.on('message', (message: any) => {          
+        wsServiceRef.current.on('message', (message: any) => {      
+          console.log('WebSocketProvider: Message received:', message);
+          
           if (message.type === 'trade' && message.data && Array.isArray(message.data)) {
             console.log('Trade data received:', message.data);
             

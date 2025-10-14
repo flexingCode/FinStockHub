@@ -43,6 +43,18 @@ class WebSocketService {
           resolve();
         };
 
+        this.ws.onmessage = (event) => {
+          try {
+            const message = JSON.parse(event.data);
+            console.log('WebSocket received:', message);
+            
+            // Emitir el mensaje completo según la documentación
+            this.emit('message', message);
+          } catch (error) {
+            console.error('WebSocket: Error parsing message:', error);
+          }
+        };
+
         this.ws.onclose = () => {
           clearTimeout(timeoutId);
           this.handleReconnection();
