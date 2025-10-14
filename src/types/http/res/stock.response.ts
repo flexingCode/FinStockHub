@@ -1,4 +1,4 @@
-interface StockResponse{
+export interface StockResponse{
     currency: string;
     description: string;
     displaySymbol: string;
@@ -8,7 +8,7 @@ interface StockResponse{
     type: string;
 }
 
-interface StockCurrentPriceResponse{
+export interface StockCurrentPriceResponse{
     c: number;  // Current price
     h: number;  // High price of the day
     l: number;  // Low price of the day

@@ -8,13 +8,11 @@ interface MainLayoutProps {
 
 const MainLayout = ({ children }: MainLayoutProps) => {
     return (
-        <SafeAreaView className="flex-1 bg-white">
-            <WebSocketProvider>
-                <View className="flex-1 pt-4 px-4">
-                    {children}
-                </View>
-            </WebSocketProvider>
-        </SafeAreaView>
+        <WebSocketProvider>
+            <View className="flex-1 pt-4 px-4">
+                {children}
+            </View>
+        </WebSocketProvider>
 
 
     )

@@ -9,8 +9,18 @@ const getStockSymbols = async (exchange: string) => {
     return response.data
 };
 
+const getStockQuote = async (symbol: string) => {
+    const response = await http.get(`/quote`, {
+        params: {
+            symbol,
+        },
+    });
+    return response.data;
+}
+
 const stockServices = {
     getStockSymbols,
+    getStockQuote,
 };
 
 export default stockServices;

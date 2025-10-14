@@ -16,6 +16,13 @@ class WebSocketService {
     };
   }
 
+  emit(event: string, data: any): void {
+    const handler = this.messageHandlers.get(event);
+    if (handler) {
+      handler(data);
+    }
+  }
+
   connect(): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
@@ -37,7 +44,16 @@ class WebSocketService {
         };
 
         this.ws.onmessage = (event) => {
-          //this.handleMessage(JSON.parse(event.data));
+          try {
+            const message = JSON.parse(event.data);
+            if (message.type === 'trade') {
+              this.emit('trade', message.data);
+            } else if (message.type === 'ping') {
+              this.emit('ping', message.data);
+            }
+          } catch (error) {
+            console.error('WebSocket: Error parsing message:', error);
+          }
         };
 
         this.ws.onclose = () => {
