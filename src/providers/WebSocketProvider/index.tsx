@@ -1,0 +1,109 @@
+import React, { createContext, useContext, useEffect, useRef, ReactNode } from 'react';
+import { FINNHUB_API_KEY } from '@env';
+  import { WebSocketContextType } from '@/types/websocket.types';
+import WebSocketService from '@/services/websocket.service';
+import useWebSocketStore from '@/stores/websocketStore';
+
+const WebSocketContext = createContext<WebSocketContextType | null>(null);
+
+interface WebSocketProviderProps {
+  children: ReactNode;
+}
+
+const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
+  const wsServiceRef = useRef<WebSocketService | null>(null);
+  const {
+    connectionStatus,
+    setConnectionStatus,
+    setError,
+    addSubscribedSymbol,
+    removeSubscribedSymbol,
+  } = useWebSocketStore();
+
+  useEffect(() => {
+    const initializeWebSocket = async () => {
+      try {
+        const config = {
+          url: 'wss://ws.finnhub.io',
+          token: FINNHUB_API_KEY,
+          reconnectInterval: 5000,
+          maxReconnectAttempts: 10,
+        };
+
+        wsServiceRef.current = new WebSocketService(config);
+
+        await wsServiceRef.current.connect();
+        setConnectionStatus('connected');
+      } catch (error) {
+        setError(error instanceof Error ? error.message : 'Connection failed');
+        setConnectionStatus('error');
+      }
+    };
+
+    initializeWebSocket();
+
+    return () => {
+      if (wsServiceRef.current) {
+        wsServiceRef.current.disconnect();
+      }
+    };
+  }, [setConnectionStatus, setError]);
+
+  const connect = async () => {
+    if (wsServiceRef.current) {
+      try {
+        setConnectionStatus('connecting');
+        await wsServiceRef.current.connect();
+        setConnectionStatus('connected');
+      } catch (error) {
+        setError(error instanceof Error ? error.message : 'Connection failed');
+        setConnectionStatus('error');
+      }
+    }
+  };
+
+  const disconnect = () => {
+    if (wsServiceRef.current) {
+      wsServiceRef.current.disconnect();
+      setConnectionStatus('disconnected');
+    }
+  };
+
+  const subscribe = (symbol: string) => {
+    if (wsServiceRef.current) {
+      wsServiceRef.current.subscribe(symbol);
+      addSubscribedSymbol(symbol);
+    }
+  };
+
+  const unsubscribe = (symbol: string) => {
+    if (wsServiceRef.current) {
+      wsServiceRef.current.unsubscribe(symbol);
+      removeSubscribedSymbol(symbol);
+    }
+  };
+
+  const contextValue: WebSocketContextType = {
+    connect,
+    disconnect,
+    subscribe,
+    unsubscribe,
+    connectionStatus,
+  };
+
+  return (
+    <WebSocketContext.Provider value={contextValue}>
+      {children}
+    </WebSocketContext.Provider>
+  );
+};
+
+export const useWebSocket = (): WebSocketContextType => {
+  const context = useContext(WebSocketContext);
+  if (!context) {
+    throw new Error('useWebSocket must be used within a WebSocketProvider');
+  }
+  return context;
+};
+
+export default WebSocketProvider;

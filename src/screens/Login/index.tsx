@@ -13,7 +13,7 @@ const Login = () => {
                     Login
                 </Text>
                 <Pressable 
-                    onPress={() => navigation.navigate('Home')} 
+                    onPress={() => navigation.navigate('HomeStack')} 
                     className="bg-blue-500 p-4 rounded-lg"
                 >
                     <Text className="text-white text-center font-semibold text-lg">

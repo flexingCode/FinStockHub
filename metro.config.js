@@ -11,6 +11,8 @@ config.resolver.alias = {
   '@screens': path.resolve(__dirname, 'src/screens'),
   '@hooks': path.resolve(__dirname, 'src/hooks'),
   '@stacks': path.resolve(__dirname, 'src/stacks'),
+  '@stores': path.resolve(__dirname, 'src/stores'),
+  '@providers': path.resolve(__dirname, 'src/providers'),
 };
 
 module.exports = withNativeWind(config, { input: "./global.css" });

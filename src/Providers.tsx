@@ -1,7 +1,21 @@
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
+import { useEffect } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import stockServices from "./services/stock.services";
+import useStocksStore from "./stores/stocksStore";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
+
+  const { setStockSymbols } = useStocksStore();
+
+  useEffect(() => {
+    getStockSymbols();
+  }, [])
+
+  const getStockSymbols = async () => {
+    const response = await stockServices.getStockSymbols("US");
+    setStockSymbols(response);
+  }
 
   const navigationTheme = {
     ...DefaultTheme,
@@ -13,11 +27,9 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView className="flex-1 bg-white">
-        <NavigationContainer theme={navigationTheme}>
+      <NavigationContainer theme={navigationTheme}>
           {children}
-        </NavigationContainer>
-      </SafeAreaView>
+      </NavigationContainer>
     </SafeAreaProvider>
   );
 };

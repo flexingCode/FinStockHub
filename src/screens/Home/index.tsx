@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 
-const Home = () => {
+const Home = () => {  
   return (
     <View>
       <Text>Home</Text>

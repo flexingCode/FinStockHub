@@ -26,6 +26,12 @@
       ],
       "@stacks/*": [
         "src/stacks/*"
+      ],
+      "@stores/*": [
+        "src/stores/*"
+      ],
+      "@providers/*": [
+        "src/providers/*"
       ]
     }
   }
