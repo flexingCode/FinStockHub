@@ -19,10 +19,18 @@ class WebSocketService {
   connect(): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
-        const wsUrl = `${this.config.url}?token=${this.config.token}`;
+        const wsUrl = `${this.config.url}?token=${this.config.token}`;        
+        const timeoutId = setTimeout(() => {
+          if (this.ws && this.ws.readyState === WebSocket.CONNECTING) {
+            this.ws.close();
+            reject(new Error('WebSocket connection timeout'));
+          }
+        }, 10000); 
+
         this.ws = new WebSocket(wsUrl);
 
         this.ws.onopen = () => {
+          clearTimeout(timeoutId);
           this.reconnectAttempts = 0;
           this.resubscribeToSymbols();
           resolve();
@@ -33,10 +41,12 @@ class WebSocketService {
         };
 
         this.ws.onclose = () => {
+          clearTimeout(timeoutId);
           this.handleReconnection();
         };
 
         this.ws.onerror = (error) => {
+          clearTimeout(timeoutId);
           reject(error);
         };
       } catch (error) {

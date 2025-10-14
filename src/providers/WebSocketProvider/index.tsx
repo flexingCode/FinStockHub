@@ -21,6 +21,7 @@ const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
   } = useWebSocketStore();
 
   useEffect(() => {
+    console.log('WebSocketProvider: Initializing...');  
     const initializeWebSocket = async () => {
       try {
         const config = {
@@ -30,11 +31,15 @@ const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
           maxReconnectAttempts: 10,
         };
 
+        console.log('WebSocketProvider: Creating service...');
         wsServiceRef.current = new WebSocketService(config);
 
+        console.log('WebSocketProvider: Connecting...');
         await wsServiceRef.current.connect();
+        console.log('WebSocket connected');
         setConnectionStatus('connected');
       } catch (error) {
+        console.error('WebSocketProvider: Connection failed:', error);
         setError(error instanceof Error ? error.message : 'Connection failed');
         setConnectionStatus('error');
       }
