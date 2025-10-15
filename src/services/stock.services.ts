@@ -1,4 +1,5 @@
 import http from "@/http";
+import { GetStockQuoteResponse } from "@/types/http/res/stock.response";
 
 const getStockSymbols = async (exchange: string) => {
     const response = await http.get(`/stock/symbol`, {
@@ -9,7 +10,7 @@ const getStockSymbols = async (exchange: string) => {
     return response.data
 };
 
-const getStockQuote = async (symbol: string) => {
+const getStockQuote = async (symbol: string):Promise<GetStockQuoteResponse> => {
     const response = await http.get(`/quote`, {
         params: {
             symbol,

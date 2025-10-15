@@ -5,6 +5,7 @@ import { Button, Text, View } from "react-native";
 import AuthButton from "@/components/AuthButton";
 import { useAuthStore } from "@/stores/authStore";
 import { useEffect } from "react";
+import notifee from "@notifee/react-native";
 
 type AppStackNavigationProp = NativeStackNavigationProp<AppStackScreens>;
 
@@ -13,10 +14,18 @@ const Login = () => {
     const { isAuthenticated } = useAuthStore();
 
     useEffect(() => {
+        requesNotificationPermission()
+    }, []);
+
+    useEffect(() => {
         if (isAuthenticated) {
             navigation.navigate('HomeStack');
         }
     }, [isAuthenticated, navigation]);
+
+    const requesNotificationPermission = async () => {
+        await notifee.requestPermission()
+    }
 
     const handleLoginSuccess = () => {
         navigation.navigate('HomeStack');
