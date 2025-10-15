@@ -11,6 +11,7 @@
     "add-alias": "node scripts/add-alias.js"
   },
   "dependencies": {
+    "@notifee/react-native": "^9.1.8",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-vector-icons/feather": "^12.3.0",
     "@react-native-vector-icons/fontisto": "^12.3.0",
@@ -24,6 +25,7 @@
     "react-native": "0.82.0",
     "react-native-actions-sheet": "^0.9.7",
     "react-native-auth0": "^5.0.1",
+    "react-native-background-fetch": "^4.2.8",
     "react-native-css-interop": "^0.2.1",
     "react-native-gesture-handler": "^2.28.0",
     "react-native-gifted-charts": "^1.4.64",
