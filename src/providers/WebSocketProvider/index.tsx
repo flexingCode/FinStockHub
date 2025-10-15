@@ -54,12 +54,6 @@ const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
                 const timestamp = trade.t || Date.now();
                 updateStockPrice(trade.s, trade.p, timestamp);
                 addPricePoint(trade.s, trade.p, trade.v);
-
-                limitAlerts.forEach((alert) => {
-                  if (alert.symbol === trade.s && trade.p >= alert.limit) {
-                    Toast.info(`Limit alert: ${alert.symbol} = $${alert.limit}`);
-                  }
-                });
               }
             });
           }

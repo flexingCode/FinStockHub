@@ -98,8 +98,13 @@ export const useStockQuotes = ({
         }
         return prev;
       });
+      limitAlerts.forEach((alert) => {
+        if (alert.symbol === symbol && priceUpdate.price >= alert.limit) {
+          Toast.info(`Limit alert: ${alert.symbol} = $${alert.limit}`);
+        }
+      });
     });
-  }, [stockPrices]);
+  }, [stockPrices, limitAlerts]);
 
   const loadNextBatch = useCallback(async () => {
     if (loading || !hasMore) return;
@@ -132,11 +137,6 @@ export const useStockQuotes = ({
           validQuotes.push(data);          
           addPricePoint(symbol, data.c, 0);
         }
-        limitAlerts.forEach((alert) => {
-          if (alert.symbol === symbol && data.c >= alert.limit) {
-            Toast.info(`Limit alert: ${alert.symbol} = $${alert.limit}`,);
-          }
-        });
       });
 
       setQuotes(prev => ({ ...prev, ...newQuotes }));
