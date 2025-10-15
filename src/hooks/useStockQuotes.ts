@@ -5,6 +5,8 @@ import stockServices from '@/services/stock.services';
 import { useWebSocket } from '@/providers/WebSocketProvider';
 import useWebSocketStore from '@/stores/websocketStore';
 import { usePriceHistoryStore } from '@/stores/priceHistoryStore';
+import { useLimitAlertsStore } from '@/stores/limitAlertsStore';
+import { Toast } from 'toastify-react-native';
 
 interface UseStockQuotesProps {
   symbols: string[];
@@ -26,6 +28,7 @@ export const useStockQuotes = ({
   batchSize = 20,
   onBatchLoaded
 }: UseStockQuotesProps): UseStockQuotesReturn => {
+  const {limitAlerts} = useLimitAlertsStore()
   const [quotes, setQuotes] = useState<{ [symbol: string]: StockCurrentPriceResponse }>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -122,7 +125,15 @@ export const useStockQuotes = ({
           validQuotes.push(data);          
           addPricePoint(symbol, data.c, 0);
         }
+        limitAlerts.forEach((alert) => {
+          console.log('Limit alert:', alert.symbol, data.c, alert.limit);
+          if (alert.symbol === symbol && data.c >= alert.limit) {
+            Toast.info(`Limit alert: ${alert.symbol} = $${alert.limit}`);
+          }
+        });
       });
+
+      
 
       setQuotes(prev => ({ ...prev, ...newQuotes }));
       

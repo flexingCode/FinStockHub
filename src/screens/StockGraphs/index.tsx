@@ -6,13 +6,18 @@ import { FlatList, Text, View } from "react-native";
 const StockGraphs = () => {
     const { history, getLatestPrice } = usePriceHistoryStore()
     const { stockSymbols } = useStocksStore()
-
+    
+    const reorderHistory = Object.keys(history).sort((a, b) => {
+        if (a === 'AAPL') return -1;
+        if (b === 'AAPL') return 1;
+        return 0;
+    });
 
     return (
         <View className="flex-1">
             <Text className="text-4xl font-bold p-4">My Stock Graphs</Text>
             <FlatList
-                data={Object.keys(history)}
+                data={reorderHistory}
                 renderItem={({ item }) => (
                     <StockGraphCard
                         symbol={item}

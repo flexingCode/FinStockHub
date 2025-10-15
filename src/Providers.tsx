@@ -6,6 +6,7 @@ import stockServices from "./services/stock.services";
 import useStocksStore from "./stores/stocksStore";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import '@/sheets';
+import ToastManager from 'toastify-react-native'
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
 
@@ -34,6 +35,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <SheetProvider>
             {children}
+            <ToastManager />
           </SheetProvider>
         </GestureHandlerRootView>
       </NavigationContainer>

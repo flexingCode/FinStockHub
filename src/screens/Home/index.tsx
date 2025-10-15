@@ -5,7 +5,13 @@ import StockCard from "@/components/StockCard/indext";
 
 const Home = () => {
   const { stockSymbols } = useStocksStore();
-  const symbols = stockSymbols.map(stock => stock.symbol);
+  
+  //This is just to ensure that Apple (AAPL) always appears first to test the limit alerts
+  const appleStock = stockSymbols.find(stock => stock.symbol === 'AAPL');
+  const otherStocks = stockSymbols.filter(stock => stock.symbol !== 'AAPL');
+  const reorderedSymbols = appleStock ? [appleStock, ...otherStocks] : stockSymbols;
+  
+  const symbols = reorderedSymbols.map(stock => stock.symbol);
 
   const {
     quotes,
@@ -22,7 +28,7 @@ const Home = () => {
     }
   });
 
-  const loadedSymbols = stockSymbols.filter(stock => quotes[stock.symbol]);
+  const loadedSymbols = reorderedSymbols.filter(stock => quotes[stock.symbol]);
 
   const renderStockCard = ({ item }: { item: any }) => {
     const quote = quotes[item.symbol];

@@ -4,6 +4,8 @@ import { WebSocketContextType } from '@/types/websocket.types';
 import WebSocketService from '@/services/websocket.service';
 import useWebSocketStore from '@/stores/websocketStore';
 import { usePriceHistoryStore } from '@/stores/priceHistoryStore';
+import { useLimitAlertsStore } from '@/stores/limitAlertsStore';
+import { Toast } from 'toastify-react-native';
 
 const WebSocketContext = createContext<WebSocketContextType | null>(null);
 
@@ -21,6 +23,8 @@ const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
     removeSubscribedSymbol,
     updateStockPrice,
   } = useWebSocketStore();
+
+  const {limitAlerts} = useLimitAlertsStore()
 
   const { addPricePoint } = usePriceHistoryStore();
 
@@ -50,6 +54,12 @@ const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
                 const timestamp = trade.t || Date.now();
                 updateStockPrice(trade.s, trade.p, timestamp);
                 addPricePoint(trade.s, trade.p, trade.v);
+
+                limitAlerts.forEach((alert) => {
+                  if (alert.symbol === trade.s && trade.p >= alert.limit) {
+                    Toast.info(`Limit alert: ${alert.symbol} = $${alert.limit}`);
+                  }
+                });
               }
             });
           }
