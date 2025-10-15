@@ -1,4 +1,4 @@
-import { Text, View, FlatList, RefreshControl } from "react-native";
+import { Text, View, FlatList, RefreshControl, ActivityIndicator } from "react-native";
 import { useStockQuotes } from "@/hooks/useStockQuotes";
 import useStocksStore from "@/stores/stocksStore";
 import StockCard from "@/components/StockCard/indext";
@@ -6,7 +6,7 @@ import StockCard from "@/components/StockCard/indext";
 const Home = () => {
   const { stockSymbols } = useStocksStore();
   const symbols = stockSymbols.map(stock => stock.symbol);
-  
+
   const {
     quotes,
     loading,
@@ -21,7 +21,7 @@ const Home = () => {
       console.log(`Loaded ${quotes.length} quotes`);
     }
   });
-  
+
   const loadedSymbols = stockSymbols.filter(stock => quotes[stock.symbol]);
 
   const renderStockCard = ({ item }: { item: any }) => {
@@ -45,12 +45,15 @@ const Home = () => {
 
   const renderFooter = () => {
     if (!hasMore) return null;
-    
+
     return (
-      <View className="p-4">
-        <Text className="text-blue-500text-center">
-          {loading && 'Loading more...'}
-        </Text>
+      <View className="p-4 items-center justify-center">
+        {loading && (
+          <View className="flex-row items-center justify-center gap-4">
+            <ActivityIndicator size="small" color="#0000ff" />
+            <Text className="text-center text-gray-500">Loading</Text>
+          </View>
+        )}
       </View>
     );
   };

@@ -14,6 +14,9 @@ importers:
       '@react-native-vector-icons/feather':
         specifier: ^12.3.0
         version: 12.3.0(react-native@0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1))(react@19.1.1)
+      '@react-native-vector-icons/fontisto':
+        specifier: ^12.3.0
+        version: 12.3.0(react-native@0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1))(react@19.1.1)
       '@react-native/new-app-screen':
         specifier: 0.82.0
         version: 0.82.0(@types/react@19.2.2)(react-native@0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1))(react@19.1.1)
@@ -41,6 +44,9 @@ importers:
       react-native-actions-sheet:
         specifier: ^0.9.7
         version: 0.9.7(react-native-gesture-handler@2.28.0(react-native@0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1))(react@19.1.1))(react-native-safe-area-context@5.4.0(react-native@0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1))(react@19.1.1))(react-native@0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1))
+      react-native-auth0:
+        specifier: ^5.0.1
+        version: 5.0.1(react-native@0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1))(react@19.1.1)
       react-native-css-interop:
         specifier: ^0.2.1
         version: 0.2.1(ece2db5b27d8b694f30e9240c1b695bf)
@@ -147,6 +153,9 @@ packages:
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
+
+  '@auth0/auth0-spa-js@2.3.0':
+    resolution: {integrity: sha512-zAW6w79UO+G1+3AxboVQIUIZy05xluSOb1ymGg2dqG0pIi0JxEtZGec05BOf2LJ9SehzW4WeCYUQsYD9BjrVpQ==}
 
   '@babel/code-frame@7.27.1':
     resolution: {integrity: sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg==}
@@ -1036,6 +1045,13 @@ packages:
       react: '*'
       react-native: '*'
 
+  '@react-native-vector-icons/fontisto@12.3.0':
+    resolution: {integrity: sha512-f8sNGS3oaG8bj0Qrx6jKmAL3Ppdg9iSuadj5FH3+boydW2PvyIu9mMbXJsGLGvkGscCa/dUoI1H9i/oTS9W3bQ==}
+    engines: {node: '>= 18.0.0'}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+
   '@react-native/assets-registry@0.82.0':
     resolution: {integrity: sha512-SHRZxH+VHb6RwcHNskxyjso6o91Lq0DPgOpE5cDrppn1ziYhI723rjufFgh59RcpH441eci0/cXs/b0csXTtnw==}
     engines: {node: '>= 20.19.4'}
@@ -1507,6 +1523,9 @@ packages:
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
+
+  base-64@1.0.0:
+    resolution: {integrity: sha512-kwDPIFCGx0NZHog36dj+tHiwP4QMzsZ3AgMViUBKI0+V5n4U0ufTCUMhnQ04diaRI8EX/QcPfql7zlhZ7j4zgg==}
 
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
@@ -2800,6 +2819,10 @@ packages:
     resolution: {integrity: sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ==}
     engines: {node: '>=4.0'}
 
+  jwt-decode@4.0.0:
+    resolution: {integrity: sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==}
+    engines: {node: '>=18'}
+
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
@@ -3449,6 +3472,9 @@ packages:
   proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
 
+  punycode@1.4.1:
+    resolution: {integrity: sha512-jmYNElW7yvO7TV33CjSmvSiE2yco3bV2czu/OzDKdMNVZQWfxCblURLhf+47syQRBntjfLdd/H0egrzIG+oaFQ==}
+
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
@@ -3502,6 +3528,16 @@ packages:
       react-native: '*'
       react-native-gesture-handler: '*'
       react-native-safe-area-context: '*'
+
+  react-native-auth0@5.0.1:
+    resolution: {integrity: sha512-wnsmgD/4b7/96T5LcwStThszcm9iv6kRUUeRN/BLDQXmC+M5oOOTrF9GvRx6JXrg45zD1oNSXuhArcvtOzRLvg==}
+    peerDependencies:
+      expo: '*'
+      react: '>=19.0.0'
+      react-native: '>=0.78.0'
+    peerDependenciesMeta:
+      expo:
+        optional: true
 
   react-native-css-interop@0.2.1:
     resolution: {integrity: sha512-B88f5rIymJXmy1sNC/MhTkb3xxBej1KkuAt7TiT9iM7oXz3RM8Bn+7GUrfR02TvSgKm4cg2XiSuLEKYfKwNsjA==}
@@ -4095,6 +4131,10 @@ packages:
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
 
+  url@0.11.4:
+    resolution: {integrity: sha512-oCwdVC7mTuWiPyjLUz/COz5TLk6wgp0RCsN+wHZ2Ekneac9w8uuV0njcbbie2ME+Vs+d6duwmYuR3HgQXs1fOg==}
+    engines: {node: '>= 0.4'}
+
   use-latest-callback@0.2.6:
     resolution: {integrity: sha512-FvRG9i1HSo0wagmX63Vrm8SnlUU3LMM3WyZkQ76RnslpBrX694AdG4A0zQBx2B3ZifFA0yv/BaEHGBnEax5rZg==}
     peerDependencies:
@@ -4285,6 +4325,8 @@ packages:
 snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
+
+  '@auth0/auth0-spa-js@2.3.0': {}
 
   '@babel/code-frame@7.27.1':
     dependencies:
@@ -5541,6 +5583,14 @@ snapshots:
     transitivePeerDependencies:
       - '@react-native-vector-icons/get-image'
 
+  '@react-native-vector-icons/fontisto@12.3.0(react-native@0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1))(react@19.1.1)':
+    dependencies:
+      '@react-native-vector-icons/common': 12.3.0(react-native@0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1))(react@19.1.1)
+      react: 19.1.1
+      react-native: 0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1)
+    transitivePeerDependencies:
+      - '@react-native-vector-icons/get-image'
+
   '@react-native/assets-registry@0.82.0': {}
 
   '@react-native/babel-plugin-codegen@0.82.0(@babel/core@7.28.4)':
@@ -6212,6 +6262,8 @@ snapshots:
       babel-preset-current-node-syntax: 1.2.0(@babel/core@7.28.4)
 
   balanced-match@1.0.2: {}
+
+  base-64@1.0.0: {}
 
   base64-js@1.5.1: {}
 
@@ -7809,6 +7861,8 @@ snapshots:
       object.assign: 4.1.7
       object.values: 1.2.1
 
+  jwt-decode@4.0.0: {}
+
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
@@ -8470,6 +8524,8 @@ snapshots:
 
   proxy-from-env@1.1.0: {}
 
+  punycode@1.4.1: {}
+
   punycode@2.3.1: {}
 
   pure-rand@6.1.0: {}
@@ -8523,6 +8579,15 @@ snapshots:
       react-native: 0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1)
       react-native-gesture-handler: 2.28.0(react-native@0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1))(react@19.1.1)
       react-native-safe-area-context: 5.4.0(react-native@0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1))(react@19.1.1)
+
+  react-native-auth0@5.0.1(react-native@0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1))(react@19.1.1):
+    dependencies:
+      '@auth0/auth0-spa-js': 2.3.0
+      base-64: 1.0.0
+      jwt-decode: 4.0.0
+      react: 19.1.1
+      react-native: 0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1)
+      url: 0.11.4
 
   react-native-css-interop@0.2.1(ece2db5b27d8b694f30e9240c1b695bf):
     dependencies:
@@ -9241,6 +9306,11 @@ snapshots:
   uri-js@4.4.1:
     dependencies:
       punycode: 2.3.1
+
+  url@0.11.4:
+    dependencies:
+      punycode: 1.4.1
+      qs: 6.13.0
 
   use-latest-callback@0.2.6(react@19.1.1):
     dependencies:
