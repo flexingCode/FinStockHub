@@ -74,6 +74,13 @@ export const useStockQuotes = ({
     }
   }, [subscribe, unsubscribe]);
 
+  const clearAllSubscriptions = useCallback(() => {
+    subscribedSymbolsRef.current.forEach(symbol => {
+      unsubscribe(symbol);
+    });
+    subscribedSymbolsRef.current = [];
+  }, [unsubscribe]);
+
   
   useEffect(() => {
     Object.entries(stockPrices).forEach(([symbol, priceUpdate]) => {
@@ -126,14 +133,11 @@ export const useStockQuotes = ({
           addPricePoint(symbol, data.c, 0);
         }
         limitAlerts.forEach((alert) => {
-          console.log('Limit alert:', alert.symbol, data.c, alert.limit);
           if (alert.symbol === symbol && data.c >= alert.limit) {
-            Toast.info(`Limit alert: ${alert.symbol} = $${alert.limit}`);
+            Toast.info(`Limit alert: ${alert.symbol} = $${alert.limit}`,);
           }
         });
       });
-
-      
 
       setQuotes(prev => ({ ...prev, ...newQuotes }));
       
@@ -147,19 +151,19 @@ export const useStockQuotes = ({
     } finally {
       setLoading(false);
     }
-  }, [symbols, batchSize, currentIndex, loading, hasMore, onBatchLoaded, manageSubscriptions]);
+  }, [symbols, batchSize, currentIndex, loading, hasMore, onBatchLoaded, manageSubscriptions, limitAlerts, addPricePoint]);
 
   useEffect(() => {
     if (symbols.length > 0 && currentIndex === 0) {
       loadNextBatch();
     }
-  }, [symbols.length]);
+  }, [symbols.length, currentIndex, loadNextBatch]);
 
   const refresh = useCallback(async () => {
+    clearAllSubscriptions();
     setCurrentIndex(0);
     setQuotes({});
-    await loadNextBatch();
-  }, [loadNextBatch]);
+  }, [clearAllSubscriptions]);
 
   return {
     quotes,

@@ -35,7 +35,13 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <SheetProvider>
             {children}
-            <ToastManager />
+            <ToastManager iconFamily='Feather' icons={{
+              success: 'check',
+              error: 'x-circle',
+              info: 'info',
+              warn: 'alert-circle',
+              default: 'notifications',
+            }}  closeIconFamily='Feather' closeIcon='x-circle'/>
           </SheetProvider>
         </GestureHandlerRootView>
       </NavigationContainer>

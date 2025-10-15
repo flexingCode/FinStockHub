@@ -71,6 +71,9 @@ importers:
       react-native-svg:
         specifier: ^15.14.0
         version: 15.14.0(react-native@0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1))(react@19.1.1)
+      react-native-vector-icons:
+        specifier: ^10.3.0
+        version: 10.3.0
       react-native-worklets:
         specifier: ^0.6.1
         version: 0.6.1(@babel/core@7.28.4)(react-native@0.82.0(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.0(@babel/core@7.28.4))(@types/react@19.2.2)(react@19.1.1))(react@19.1.1)
