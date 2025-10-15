@@ -4,6 +4,7 @@ import { GetStockQuoteResponse, StockCurrentPriceResponse } from '@/types/http/r
 import stockServices from '@/services/stock.services';
 import { useWebSocket } from '@/providers/WebSocketProvider';
 import useWebSocketStore from '@/stores/websocketStore';
+import { usePriceHistoryStore } from '@/stores/priceHistoryStore';
 
 interface UseStockQuotesProps {
   symbols: string[];
@@ -31,6 +32,7 @@ export const useStockQuotes = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const { subscribe, unsubscribe } = useWebSocket();
   const { stockPrices } = useWebSocketStore();
+  const { addPricePoint } = usePriceHistoryStore();
   const hasMore = currentIndex < symbols.length;
 
   const subscribedSymbolsRef = useRef<string[]>([]);
@@ -117,13 +119,13 @@ export const useStockQuotes = ({
       results.forEach(({ symbol, data }) => {
         if (data) {
           newQuotes[symbol] = data;
-          validQuotes.push(data);
+          validQuotes.push(data);          
+          addPricePoint(symbol, data.c, 0);
         }
       });
 
       setQuotes(prev => ({ ...prev, ...newQuotes }));
       
-      // Usar la función de manageSubscriptions que no causa re-renders
       manageSubscriptions(batch);
 
       setCurrentIndex(prev => prev + batchSize);      

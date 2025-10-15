@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useEffect, useRef, ReactNode } from 'react';
 import { FINNHUB_API_KEY } from '@env';
-  import { WebSocketContextType } from '@/types/websocket.types';
+import { WebSocketContextType } from '@/types/websocket.types';
 import WebSocketService from '@/services/websocket.service';
 import useWebSocketStore from '@/stores/websocketStore';
+import { usePriceHistoryStore } from '@/stores/priceHistoryStore';
 
 const WebSocketContext = createContext<WebSocketContextType | null>(null);
 
@@ -21,8 +22,10 @@ const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
     updateStockPrice,
   } = useWebSocketStore();
 
+  const { addPricePoint } = usePriceHistoryStore();
+
   useEffect(() => {
-    console.log('WebSocketProvider: Initializing...');  
+    console.log('WebSocketProvider: Initializing...');
     const initializeWebSocket = async () => {
       try {
         const config = {
@@ -35,16 +38,18 @@ const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
         console.log('WebSocketProvider: Creating service...');
         wsServiceRef.current = new WebSocketService(config);
 
-        wsServiceRef.current.on('message', (message: any) => {      
+        wsServiceRef.current.on('message', (message: any) => {
           console.log('WebSocketProvider: Message received:', message);
-          
+
           if (message.type === 'trade' && message.data && Array.isArray(message.data)) {
             console.log('Trade data received:', message.data);
-            
+
             message.data.forEach((trade: any) => {
               if (trade.s && trade.p) {
                 console.log(`Price update: ${trade.s} = $${trade.p}`);
-                updateStockPrice(trade.s, trade.p, trade.t || Date.now());
+                const timestamp = trade.t || Date.now();
+                updateStockPrice(trade.s, trade.p, timestamp);
+                addPricePoint(trade.s, trade.p, trade.v);
               }
             });
           }
