@@ -1,8 +1,11 @@
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { useEffect } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SheetProvider } from "react-native-actions-sheet";
 import stockServices from "./services/stock.services";
 import useStocksStore from "./stores/stocksStore";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import '@/sheets';
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
 
@@ -28,7 +31,11 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <SafeAreaProvider>
       <NavigationContainer theme={navigationTheme}>
-          {children}
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <SheetProvider>
+            {children}
+          </SheetProvider>
+        </GestureHandlerRootView>
       </NavigationContainer>
     </SafeAreaProvider>
   );
