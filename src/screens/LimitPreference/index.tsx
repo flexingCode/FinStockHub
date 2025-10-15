@@ -1,35 +1,66 @@
+import { useLimitAlertsStore } from "@/stores/limitAlertsStore";
+import { IAlertLimit } from "@/types/ui/alertLimit";
+import { FlatList, Modal, Text, View } from "react-native";
+import LimitItem from "./components/LimitItem";
 import Button from "@/components/Button";
-import Dropdown from "@/components/Dropdown";
-import Input from "@/components/Input";
-import useStocksStore from "@/stores/stocksStore";
-import IOption from "@/types/ui/option";
 import { useState } from "react";
-import { Text, View } from "react-native";
+import LimitForm from "./components/LimitForm";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+const ListEmptyComponent = () => {
+    return (
+        <View className="flex-1 items-center justify-center min-h-96">
+            <Text className="text-center text-gray-500">No limit alerts</Text>
+        </View>
+    )
+}
 
 const LimitPreference = () => {
+    const { limitAlerts, addLimitAlert, removeLimitAlert } = useLimitAlertsStore();
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const [stock, setStock] = useState<IOption | null>(null);
-    const [limit, setLimit] = useState<string>("");
+    const handleSave = (stock: string, limit: string) => {
+        addLimitAlert({ symbol: stock, limit: parseFloat(limit) });
+        setIsModalVisible(false);
+    }
 
-    const {stockSymbols} = useStocksStore();
-    const stocks: IOption[] = stockSymbols.map((symbol) => ({
-        label: symbol.description,
-        value: symbol.symbol
-    }));
+    const handleDelete = (symbol: string) => {
+        removeLimitAlert(symbol);
+    }
+
+    const handleClose = () => {
+        setIsModalVisible(false);
+    }
+
+    const renderItem = ({ item }: { item: IAlertLimit }) => {
+        return <LimitItem symbol={item.symbol} limit={item.limit} onDelete={() => handleDelete(item.symbol)} />
+    }
 
     return (
-        <View className="flex-1">
+        <View className="flex-1 mb-4">
             <Text className="text-4xl font-bold p-4">Limit Preference</Text>
-            <View className="flex flex-1 gap-4">
-                <Dropdown options={stocks} onSelect={(option) => setStock(option)} value={stock || null} placeholder="Select a stock to track" />
-                <Input placeholder="Limit" value={limit} onChangeText={setLimit} />
-            </View>
-            <Button title="Save" onPress={() => {
-                if (stock && limit) {
-                    console.log(stock, limit);
-                }
-            }} />
-        </View>
+            <FlatList
+                data={limitAlerts}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.symbol}
+                ListEmptyComponent={ListEmptyComponent}
+            />
+
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={isModalVisible}
+                onRequestClose={() => setIsModalVisible(false)}
+            >
+                <View className="flex-1 bg-black/50 justify-center items-center p-4">
+                    <View className="bg-white rounded-2xl w-full max-w-md shadow-2xl p-4">
+                        <LimitForm onClose={handleClose} onSave={handleSave} />
+                    </View>
+                </View>
+            </Modal >
+
+            <Button title="Add Limit Alert" onPress={() => setIsModalVisible(true)} />
+        </View >
     )
 }
 

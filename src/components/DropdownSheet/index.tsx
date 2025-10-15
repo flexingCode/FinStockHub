@@ -40,7 +40,7 @@ const DropdownSheet = () => {
       initialSnapIndex={0}
       backgroundInteractionEnabled={true}
       gestureEnabled={true}
-      containerStyle={{ zIndex: 9999 }}
+      containerStyle={{ zIndex: 9999999 }}
     >
       <View className="p-4">
         <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 16, textAlign: 'center' }}>
