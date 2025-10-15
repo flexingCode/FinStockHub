@@ -22,6 +22,13 @@ const LimitForm = (props: LimitFormProps) => {
         label: symbol.description,
         value: symbol.symbol
     }));
+
+    const handleSave = () => {
+        if (stock && limit) {
+            onSave(stock.value, limit);
+        }
+    }
+
     return (
         <View className="gap-6" >
             <View>
@@ -37,11 +44,7 @@ const LimitForm = (props: LimitFormProps) => {
                  placeholder="Select a stock to track" 
              />
             <Input placeholder="Limit" value={limit} onChangeText={setLimit} />
-            <Button title="Save" onPress={() => {
-                if (stock && limit) {
-                    console.log(stock, limit);
-                }
-            }} />
+            <Button title="Save" onPress={handleSave} />
         </View>
     )
 }
