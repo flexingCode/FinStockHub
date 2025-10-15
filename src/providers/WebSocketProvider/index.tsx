@@ -43,14 +43,11 @@ const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
         wsServiceRef.current = new WebSocketService(config);
 
         wsServiceRef.current.on('message', (message: any) => {
-          console.log('WebSocketProvider: Message received:', message);
 
           if (message.type === 'trade' && message.data && Array.isArray(message.data)) {
-            console.log('Trade data received:', message.data);
 
             message.data.forEach((trade: any) => {
               if (trade.s && trade.p) {
-                console.log(`Price update: ${trade.s} = $${trade.p}`);
                 const timestamp = trade.t || Date.now();
                 updateStockPrice(trade.s, trade.p, timestamp);
                 addPricePoint(trade.s, trade.p, trade.v);
