@@ -109,6 +109,23 @@ android {
     }
 }
 
+repositories {
+    google()
+    mavenCentral()
+    maven {
+        url("https://maven.google.com")
+    }
+    maven {
+        url("https://www.jitpack.io")
+    }
+    maven {
+        url("https://developer.huawei.com/repo/")
+    }
+    maven {
+        url("${project(':react-native-background-fetch').projectDir}/libs")
+    }
+}
+
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
