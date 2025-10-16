@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { View, Text, Pressable, Image } from 'react-native';
 import { useAuthStore } from '@/stores/authStore';
 import { useNavigation } from '@react-navigation/native';
@@ -55,4 +55,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default memo(UserProfile);

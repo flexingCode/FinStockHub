@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { View, Text } from 'react-native';
 import { LineChart } from "react-native-gifted-charts";
 
@@ -9,7 +9,7 @@ interface StockGraphCardProps {
     graphData: { value: number }[]
 }
 
-const StockGraphCard = (props: StockGraphCardProps) => {
+const StockGraphCard = React.memo((props: StockGraphCardProps) => {
     const { symbol, name, graphData, currentPrice } = props;
     
     const getSpacing = useCallback((dataLength: number) => {
@@ -127,6 +127,6 @@ const StockGraphCard = (props: StockGraphCardProps) => {
             </View>
         </View>
     )
-};
+});
 
 export default StockGraphCard;

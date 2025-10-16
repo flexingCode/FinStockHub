@@ -2,6 +2,7 @@ import { Text, View, FlatList, RefreshControl, ActivityIndicator } from "react-n
 import { useStockQuotes } from "@/hooks/useStockQuotes";
 import useStocksStore from "@/stores/stocksStore";
 import StockCard from "@/components/StockCard/indext";
+import { useCallback } from "react";
 
 const Home = () => {
   const { stockSymbols } = useStocksStore();
@@ -49,7 +50,7 @@ const Home = () => {
     }
   };
 
-  const renderFooter = () => {
+  const renderFooter = useCallback(() => {
     if (!hasMore) return null;
 
     return (
@@ -62,7 +63,7 @@ const Home = () => {
         )}
       </View>
     );
-  };
+  }, [hasMore, loading]);
 
   if (error) {
     return (

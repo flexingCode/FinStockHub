@@ -3,7 +3,7 @@ import { IAlertLimit } from "@/types/ui/alertLimit";
 import { FlatList, Modal, Text, View } from "react-native";
 import LimitItem from "./components/LimitItem";
 import Button from "@/components/Button";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import LimitForm from "./components/LimitForm";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -32,21 +32,12 @@ const LimitPreference = () => {
         setIsModalVisible(false);
     }
 
-    const renderItem = ({ item }: { item: IAlertLimit }) => {
+    const renderItem = useCallback(({ item }: { item: IAlertLimit }) => {
         return <LimitItem symbol={item.symbol} limit={item.limit} onDelete={() => handleDelete(item.symbol)} />
-    }
+    }, [handleDelete]);
 
-    return (
-        <View className="flex-1 mb-4">
-            <Text className="text-4xl font-bold p-4">Limit Preference</Text>
-            <FlatList
-                data={limitAlerts}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.symbol}
-                ListEmptyComponent={ListEmptyComponent}
-            />
-
-            <Modal
+    const momerizeModal = useMemo(() => (
+        <Modal
                 animationType="fade"
                 transparent={true}
                 visible={isModalVisible}
@@ -58,7 +49,18 @@ const LimitPreference = () => {
                     </View>
                 </View>
             </Modal >
+    ), [isModalVisible, handleClose, handleSave]);
 
+    return (
+        <View className="flex-1 mb-4">
+            <Text className="text-4xl font-bold p-4">Limit Preference</Text>
+            <FlatList
+                data={limitAlerts}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.symbol}
+                ListEmptyComponent={ListEmptyComponent}
+            />
+            {momerizeModal}
             <Button title="Add Limit Alert" onPress={() => setIsModalVisible(true)} />
         </View >
     )

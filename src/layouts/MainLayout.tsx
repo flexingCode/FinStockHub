@@ -1,7 +1,5 @@
 import WebSocketProvider from "@/providers/WebSocketProvider"
 import { View } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
-import UserProfile from "@/components/UserProfile"
 
 interface MainLayoutProps {
     children: React.ReactNode
