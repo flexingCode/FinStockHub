@@ -206,3 +206,4 @@ xcodebuild -workspace FinStockHub.xcworkspace -scheme FinStockHub -configuration
 ```
 ## Android APK
 
+https://we.tl/t-xfDBe2xsGu
