@@ -136,6 +136,12 @@ export const useStockQuotes = ({
           newQuotes[symbol] = data;
           validQuotes.push(data);          
           addPricePoint(symbol, data.c, 0);
+
+          limitAlerts.forEach((alert) => {
+            if (alert.symbol === symbol && data.c >= alert.limit) {
+              Toast.info(`Limit alert: ${alert.symbol} = $${alert.limit}`);
+            }
+          });
         }
       });
 
