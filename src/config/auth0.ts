@@ -1,8 +1,16 @@
 import Auth0, { Credentials } from 'react-native-auth0';
+import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from '@env';
+
+// Validate required environment variables
+if (!AUTH0_DOMAIN || !AUTH0_CLIENT_ID) {
+  throw new Error(
+    'Missing required Auth0 environment variables. Please check your .env file.'
+  );
+}
 
 const auth0 = new Auth0({
-  domain: 'dev-8crvukra8kuadxc5.us.auth0.com',
-  clientId: '54sf1BPtMqCrfkHGqfhig0mFlTrmjy9B',
+  domain: AUTH0_DOMAIN,
+  clientId: AUTH0_CLIENT_ID,
 });
 
 export interface User {

@@ -4,6 +4,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { SheetProvider } from "react-native-actions-sheet";
 import stockServices from "./services/stock.services";
 import useStocksStore from "./stores/stocksStore";
+import { useAuthStore } from "./stores/authStore";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import '@/sheets';
 import ToastManager from 'toastify-react-native'
@@ -11,8 +12,10 @@ import ToastManager from 'toastify-react-native'
 const Providers = ({ children }: { children: React.ReactNode }) => {
 
   const { setStockSymbols } = useStocksStore();
+  const { initialize: initializeAuth } = useAuthStore();
 
   useEffect(() => {
+    initializeAuth();
     getStockSymbols();
   }, [])
 

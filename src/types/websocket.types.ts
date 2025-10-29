@@ -1,10 +1,28 @@
 export type ConnectionStatus = 'connecting' | 'connected' | 'disconnected' | 'error';
 
-export type FinnhubMessage<T> = {
-  type: string;
-  data: T;
+// Finnhub WebSocket message types
+export type FinnhubTrade = {
+  s: string; // Symbol
+  p: number; // Price
+  t: number; // Timestamp
+  v: number; // Volume
 };
 
+export type FinnhubTradeMessage = {
+  type: 'trade';
+  data: FinnhubTrade[];
+};
+
+export type FinnhubPingMessage = {
+  type: 'ping';
+};
+
+export type FinnhubSubscriptionMessage = {
+  type: 'subscribe' | 'unsubscribe';
+  symbol: string;
+};
+
+export type FinnhubMessage = FinnhubTradeMessage | FinnhubPingMessage | FinnhubSubscriptionMessage;
 
 export type WebSocketConfig = {
   url: string;
@@ -14,7 +32,7 @@ export type WebSocketConfig = {
 };
 
 export type WebSocketContextType = {
-  connect: () => void;
+  connect: () => Promise<void>;
   disconnect: () => void;
   subscribe: (symbol: string) => void;
   unsubscribe: (symbol: string) => void;

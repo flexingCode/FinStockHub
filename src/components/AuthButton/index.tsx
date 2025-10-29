@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable, Text, View, ActivityIndicator } from 'react-native';
 import { useAuthStore } from '@/stores/authStore';
 import Fontisto from '@react-native-vector-icons/fontisto';
+import logger from '@/utils/logger';
 interface AuthButtonProps {
   provider: 'google';
   onPress?: () => void;
@@ -15,7 +16,7 @@ const AuthButton = ({ provider, onPress }: AuthButtonProps) => {
       await loginWithGoogle();
       onPress?.();
     } catch (error) {
-      console.error(`${provider} login error:`, error);
+      logger.error(`${provider} login error`, error);
     }
   };
 

@@ -9,6 +9,16 @@ interface StockGraphCardProps {
     graphData: { value: number }[]
 }
 
+interface TransformedData {
+    data: { value: number }[];
+    chartConfig: {
+        minValue: number;
+        maxValue: number;
+    };
+}
+
+type ChartData = { value: number }[] | TransformedData;
+
 const StockGraphCard = React.memo((props: StockGraphCardProps) => {
     const { symbol, name, graphData, currentPrice } = props;
     
@@ -19,7 +29,7 @@ const StockGraphCard = React.memo((props: StockGraphCardProps) => {
         return 30; 
     }, []);
 
-    const getTransformedData = useCallback(() => {
+    const getTransformedData = useCallback((): ChartData => {
         if (!graphData || graphData.length < 2) return graphData;
         
         const prices = graphData.map(d => d.value);
@@ -86,9 +96,19 @@ const StockGraphCard = React.memo((props: StockGraphCardProps) => {
                     {graphData && graphData.length > 1 ? (() => {
                         const transformed = getTransformedData();
                         
-                        const isTransformed = transformed && typeof transformed === 'object' && 'data' in transformed;
-                        const chartData = isTransformed ? (transformed as any).data : transformed;
-                        const chartConfig = isTransformed ? (transformed as any).chartConfig : {};
+                        // Type guard to check if transformed is TransformedData
+                        const isTransformed = (data: ChartData): data is TransformedData => {
+                            return data !== null && 
+                                   typeof data === 'object' && 
+                                   !Array.isArray(data) &&
+                                   'data' in data && 
+                                   'chartConfig' in data &&
+                                   Array.isArray((data as TransformedData).data);
+                        };
+                        
+                        const chartData: { value: number }[] = isTransformed(transformed) 
+                            ? transformed.data 
+                            : transformed as { value: number }[];
                         
                         return (
                             <LineChart

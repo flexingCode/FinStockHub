@@ -1,8 +1,9 @@
 import { Text, View, FlatList, RefreshControl, ActivityIndicator } from "react-native";
 import { useStockQuotes } from "@/hooks/useStockQuotes";
 import useStocksStore from "@/stores/stocksStore";
-import StockCard from "@/components/StockCard/indext";
+import StockCard from "@/components/StockCard";
 import { useCallback } from "react";
+import { StockResponse } from "@/types/http/res/stock.response";
 
 const Home = () => {
   const { stockSymbols } = useStocksStore();
@@ -24,14 +25,14 @@ const Home = () => {
   } = useStockQuotes({
     symbols,
     batchSize: 10,
-    onBatchLoaded: (quotes) => {
-      console.log(`Loaded ${quotes.length} quotes`);
+    onBatchLoaded: () => {
+      // Quotes loaded successfully
     }
   });
 
   const loadedSymbols = reorderedSymbols.filter(stock => quotes[stock.symbol]);
 
-  const renderStockCard = ({ item }: { item: any }) => {
+  const renderStockCard = ({ item }: { item: StockResponse }) => {
     const quote = quotes[item.symbol];
 
     return (

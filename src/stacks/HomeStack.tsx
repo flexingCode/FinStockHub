@@ -5,6 +5,7 @@ import Home from "@screens/Home";
 import LimitPreference from "@screens/LimitPreference";
 import StockGraphs from "@screens/StockGraphs";
 import BackgroundFetch from "react-native-background-fetch";
+import logger from "@/utils/logger";
 
 export type HomeBottomTabStackScreens = {
     Home: undefined;
@@ -19,7 +20,7 @@ BackgroundFetch.configure({
     minimumFetchInterval: 15,
     startOnBoot: true,
 }, setBackgroundNotificationTask, error => {
-    console.log(error);
+    logger.error('BackgroundFetch configuration failed', error);
 })
 
 const HomeStack = () => {

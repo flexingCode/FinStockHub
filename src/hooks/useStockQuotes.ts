@@ -7,6 +7,7 @@ import useWebSocketStore from '@/stores/websocketStore';
 import { usePriceHistoryStore } from '@/stores/priceHistoryStore';
 import { useLimitAlertsStore } from '@/stores/limitAlertsStore';
 import { Toast } from 'toastify-react-native';
+import logger from '@/utils/logger';
 
 interface UseStockQuotesProps {
   symbols: string[];
@@ -115,14 +116,14 @@ export const useStockQuotes = ({
     try {
       const batch = symbols.slice(currentIndex, currentIndex + batchSize);
       
-      console.log('Loading initial data for batch:', batch);
+      logger.debug('Loading initial data for batch', { batchSize: batch.length });
       
       const promises = batch.map(async symbol => {
         try {
           const data = await stockServices.getStockQuote(symbol);
           return { symbol, data };
         } catch (err) {
-          console.error(`Failed to fetch quote for ${symbol}:`, err);
+          logger.error(`Failed to fetch quote for ${symbol}`, err);
           return { symbol, data: null };
         }
       });

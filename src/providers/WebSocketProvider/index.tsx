@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useEffect, useRef, ReactNode } from 'react';
 import { FINNHUB_API_KEY } from '@env';
-import { WebSocketContextType } from '@/types/websocket.types';
+import { WebSocketContextType, FinnhubTradeMessage, FinnhubTrade } from '@/types/websocket.types';
 import WebSocketService from '@/services/websocket.service';
 import useWebSocketStore from '@/stores/websocketStore';
 import { usePriceHistoryStore } from '@/stores/priceHistoryStore';
 import { useLimitAlertsStore } from '@/stores/limitAlertsStore';
 import { Toast } from 'toastify-react-native';
+import logger from '@/utils/logger';
 
 const WebSocketContext = createContext<WebSocketContextType | null>(null);
 
@@ -29,7 +30,7 @@ const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
   const { addPricePoint } = usePriceHistoryStore();
 
   useEffect(() => {
-    console.log('WebSocketProvider: Initializing...');
+    logger.debug('WebSocketProvider: Initializing...');
     const initializeWebSocket = async () => {
       try {
         const config = {
@@ -39,29 +40,31 @@ const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
           maxReconnectAttempts: 10,
         };
 
-        console.log('WebSocketProvider: Creating service...');
+        logger.debug('WebSocketProvider: Creating service...');
         wsServiceRef.current = new WebSocketService(config);
 
-        wsServiceRef.current.on('message', (message: any) => {
-
-          if (message.type === 'trade' && message.data && Array.isArray(message.data)) {
-
-            message.data.forEach((trade: any) => {
-              if (trade.s && trade.p) {
-                const timestamp = trade.t || Date.now();
-                updateStockPrice(trade.s, trade.p, timestamp);
-                addPricePoint(trade.s, trade.p, trade.v);
-              }
-            });
+        wsServiceRef.current.on('message', (message) => {
+          // Type guard for trade messages
+          if (message.type === 'trade') {
+            const tradeMessage = message as FinnhubTradeMessage;
+            if (tradeMessage.data && Array.isArray(tradeMessage.data)) {
+              tradeMessage.data.forEach((trade: FinnhubTrade) => {
+                if (trade.s && trade.p) {
+                  const timestamp = trade.t || Date.now();
+                  updateStockPrice(trade.s, trade.p, timestamp);
+                  addPricePoint(trade.s, trade.p, trade.v);
+                }
+              });
+            }
           }
         });
 
-        console.log('WebSocketProvider: Connecting...');
+        logger.debug('WebSocketProvider: Connecting...');
         await wsServiceRef.current.connect();
-        console.log('WebSocket connected');
+        logger.info('WebSocket connected successfully');
         setConnectionStatus('connected');
       } catch (error) {
-        console.error('WebSocketProvider: Connection failed:', error);
+        logger.error('WebSocketProvider: Connection failed', error);
         setError(error instanceof Error ? error.message : 'Connection failed');
         setConnectionStatus('error');
       }
@@ -76,13 +79,14 @@ const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
     };
   }, [setConnectionStatus, setError]);
 
-  const connect = async () => {
+  const connect = async (): Promise<void> => {
     if (wsServiceRef.current) {
       try {
         setConnectionStatus('connecting');
         await wsServiceRef.current.connect();
         setConnectionStatus('connected');
       } catch (error) {
+        logger.error('WebSocketProvider: Manual connection failed', error);
         setError(error instanceof Error ? error.message : 'Connection failed');
         setConnectionStatus('error');
       }

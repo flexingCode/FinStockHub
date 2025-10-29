@@ -1,4 +1,5 @@
-import { ConnectionStatus, WebSocketConfig } from '@/types/websocket.types';
+import { ConnectionStatus, WebSocketConfig, FinnhubMessage, FinnhubTradeMessage } from '@/types/websocket.types';
+import logger from '@/utils/logger';
 
 class WebSocketService {
   private ws: WebSocket | null = null;
@@ -6,7 +7,7 @@ class WebSocketService {
   private reconnectAttempts = 0;
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
   private subscribedSymbols = new Set<string>();
-  private messageHandlers = new Map<string, (data: any) => void>();
+  private messageHandlers = new Map<string, (data: FinnhubMessage) => void>();
 
   constructor(config: WebSocketConfig) {
     this.config = {
@@ -16,7 +17,7 @@ class WebSocketService {
     };
   }
 
-  emit(event: string, data: any): void {
+  emit(event: string, data: FinnhubMessage): void {
     const handler = this.messageHandlers.get(event);
     if (handler) {
       handler(data);
@@ -45,12 +46,18 @@ class WebSocketService {
 
         this.ws.onmessage = (event) => {
           try {
-            const message = JSON.parse(event.data);
-            console.log('WebSocket received:', message);
+            const message = JSON.parse(event.data) as FinnhubMessage;
             
+            // Validate message structure
+            if (!message || typeof message !== 'object' || !message.type) {
+              logger.warn('WebSocket: Received invalid message format', message);
+              return;
+            }
+
+            logger.debug('WebSocket received message', { type: message.type });
             this.emit('message', message);
           } catch (error) {
-            console.error('WebSocket: Error parsing message:', error);
+            logger.error('WebSocket: Error parsing message', error);
           }
         };
 
@@ -86,10 +93,10 @@ class WebSocketService {
     
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       const message = JSON.stringify({ type: 'subscribe', symbol });
-      console.log('Sending subscription:', message);
+      logger.debug('Sending subscription', { symbol });
       this.ws.send(message);
     } else {
-      console.log('WebSocket not ready, subscription queued for:', symbol);
+      logger.debug('WebSocket not ready, subscription queued', { symbol });
     }
   }
 
@@ -103,11 +110,24 @@ class WebSocketService {
 
 
   private handleReconnection(): void {
-    if (this.reconnectAttempts < this.config.maxReconnectAttempts!) {
+    if (this.reconnectAttempts < (this.config.maxReconnectAttempts ?? 10)) {
       this.reconnectAttempts++;
+      const delay = this.config.reconnectInterval ?? 5000;
+      // Exponential backoff with jitter
+      const backoffDelay = delay * Math.pow(2, this.reconnectAttempts - 1) + Math.random() * 1000;
+      
+      logger.debug('WebSocket reconnecting', { 
+        attempt: this.reconnectAttempts, 
+        delay: Math.round(backoffDelay) 
+      });
+      
       this.reconnectTimer = setTimeout(() => {
-        this.connect().catch(console.error);
-      }, this.config.reconnectInterval);
+        this.connect().catch((error) => {
+          logger.error('WebSocket reconnection failed', error);
+        });
+      }, backoffDelay);
+    } else {
+      logger.error('WebSocket: Max reconnection attempts reached');
     }
   }
 
@@ -117,7 +137,7 @@ class WebSocketService {
     });
   }
 
-  on(event: string, handler: (data: any) => void): void {
+  on(event: string, handler: (data: FinnhubMessage) => void): void {
     this.messageHandlers.set(event, handler);
   }
 
