@@ -149,17 +149,6 @@ src/
 - `npm run android` - Run on Android emulator
 - `npm run lint` - Run ESLint
 
-### Debug Environment Variables
-
-For development and testing, you can use these environment keys:
-
-```env
-FINNHUB_API_KEY=d3mpti1r01qmso34v000d3mpti1r01qmso34v00g
-FINNHUB_API_URL=https://finnhub.io/api/v1
-AUTH0_IOS=org.reactjs.native.example.finstockhub://dev-8crvukra8kuadxc5.us.auth0.com/ios/org.reactjs.native.example.finstockhub/callback
-AUTH0_ANDROID=com.finstockhub://dev-8crvukra8kuadxc5.us.auth0.com/android/com.finstockhub/callback
-```
-
 ## 🔑 API Configuration
 
 ### Finnhub API
